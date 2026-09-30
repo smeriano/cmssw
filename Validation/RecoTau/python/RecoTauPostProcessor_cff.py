@@ -1,5 +1,16 @@
 import FWCore.ParameterSet.Config as cms
 from DQMServices.Core.DQMEDHarvester import DQMEDHarvester
+from Validation.RecoTau.tauDecayModeDefinitions_cff import decayModes, makeDecayModePostProcessorProfiles
+
+(
+    decayModeEfficiencyProfiles,
+    decayModeFakeProfiles,
+    decayModeSplitProfiles,
+    decayModeDuplicateProfiles,
+    decayModeResponseProfiles,
+) = makeDecayModePostProcessorProfiles()
+
+
 
 RecoTauPostProcessor = DQMEDHarvester("DQMGenericClient",
     subDirs=cms.untracked.vstring("Tau/TauValidation/", 
@@ -84,6 +95,11 @@ RecoTauPostProcessor = DQMEDHarvester("DQMGenericClient",
         "Dup_vs_idVSjet 'Duplicate Rate vs ID vs Jet' recoTauMultiMatched_idVSjet recoTau_idVSjet",
         "Dup_vs_idVSe 'Duplicate Rate vs ID vs E' recoTauMultiMatched_idVSe recoTau_idVSe",
         "Dup_vs_idVSmu 'Duplicate Rate vs ID vs Mu' recoTauMultiMatched_idVSmu recoTau_idVSmu",
+       # DM plots
+        *decayModeEfficiencyProfiles,
+        *decayModeFakeProfiles,
+        *decayModeSplitProfiles,
+        *decayModeDuplicateProfiles,
     ),
     resolution = cms.vstring(),
     resolutionProfile = cms.untracked.vstring(
@@ -95,6 +111,7 @@ RecoTauPostProcessor = DQMEDHarvester("DQMGenericClient",
         "ResponseMass_RecoOverGen_vs_eta 'Response RecoOverGen vs #eta^{gen}' responseMass_eta rms",
         "ResponseMass_RecoOverGen_vs_phi 'Response RecoOverGen vs #phi^{gen}' responseMass_phi rms",
         "ResponseMass_RecoOverGen_vs_mass 'Response RecoOverGen vs mass^{gen}' responseMass_mass rms",
+        *decayModeResponseProfiles,
     ),
     verbose = cms.untracked.uint32(2), 
     outputFileName = cms.untracked.string("")
